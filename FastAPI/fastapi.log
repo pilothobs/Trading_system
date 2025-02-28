@@ -1,0 +1,62 @@
+nohup: ignoring input
+INFO:     Will watch for changes in these directories: ['/home/administrator/trading_system/FastAPI']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [23660] using StatReload
+INFO:     Started server process [23663]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:36546 - "GET /?vscodeBrowserReqId=1740696428196 HTTP/1.1" 200 OK
+🔹 Received trade request: EUR_USD, buy, 10
+✅ Trade created: 1
+INFO:     127.0.0.1:49330 - "POST /trade/?symbol=EUR_USD&trade_type=buy&amount=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40776 - "GET /?vscodeBrowserReqId=1740696451297 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41940 - "GET /?vscodeBrowserReqId=1740696479636 HTTP/1.1" 200 OK
+INFO:     8.219.108.129:45232 - "GET /.env HTTP/1.1" 404 Not Found
+WARNING:  Invalid HTTP request received.
+WARNING:  Invalid HTTP request received.
+INFO:     139.59.244.189:60662 - "GET / HTTP/1.1" 200 OK
+INFO:     139.59.244.189:60678 - "GET /login HTTP/1.1" 404 Not Found
+INFO:     31.18.164.217:51004 - "GET / HTTP/1.0" 200 OK
+INFO:     198.235.24.47:61146 - "GET / HTTP/1.1" 200 OK
+INFO:     196.251.71.213:54466 - "GET / HTTP/1.1" 200 OK
+INFO:     65.49.20.118:56815 - "GET / HTTP/1.1" 200 OK
+INFO:     65.49.20.106:48795 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     65.49.20.98:3785 - "GET http%3A//api.ipify.org/?format=json HTTP/1.1" 404 Not Found
+INFO:     65.49.20.118:50149 - "CONNECT www.shadowserver.org%3A443 HTTP/1.1" 404 Not Found
+INFO:     193.233.48.55:56108 - "GET / HTTP/1.1" 200 OK
+INFO:     103.203.57.20:39498 - "GET / HTTP/1.1" 200 OK
+INFO:     162.142.125.118:35266 - "GET / HTTP/1.1" 200 OK
+INFO:     162.142.125.118:60372 - "GET / HTTP/1.1" 200 OK
+INFO:     162.142.125.118:60390 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     162.142.125.118:60402 - "PRI %2A HTTP/2.0" 404 Not Found
+WARNING:  Invalid HTTP request received.
+INFO:     162.142.125.118:44566 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+WARNING:  Invalid HTTP request received.
+INFO:     199.45.154.151:47156 - "GET / HTTP/1.1" 200 OK
+INFO:     199.45.154.151:48026 - "GET / HTTP/1.1" 200 OK
+INFO:     199.45.154.151:48032 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     199.45.154.151:48042 - "PRI %2A HTTP/2.0" 404 Not Found
+WARNING:  Invalid HTTP request received.
+INFO:     199.45.154.151:48156 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+WARNING:  Invalid HTTP request received.
+WARNING:  Invalid HTTP request received.
+INFO:     198.235.24.247:63890 - "GET / HTTP/1.1" 200 OK
+INFO:     154.212.141.158:42290 - "GET / HTTP/1.1" 200 OK
+INFO:     152.32.135.132:42664 - "GET / HTTP/1.1" 200 OK
+INFO:     152.32.135.132:42712 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     167.94.145.97:51234 - "GET / HTTP/1.1" 200 OK
+INFO:     167.94.145.97:38172 - "GET / HTTP/1.1" 200 OK
+INFO:     167.94.145.97:38184 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     167.94.145.97:38200 - "PRI %2A HTTP/2.0" 404 Not Found
+WARNING:  Invalid HTTP request received.
+INFO:     167.94.145.97:35184 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+WARNING:  Invalid HTTP request received.
+INFO:     147.182.154.58:51302 - "GET /aaa9 HTTP/1.1" 404 Not Found
+INFO:     147.182.154.58:51308 - "GET /aab8 HTTP/1.1" 404 Not Found
+INFO:     147.182.154.58:45310 - "GET / HTTP/1.1" 200 OK
+WARNING:  Invalid HTTP request received.
+WARNING:  Invalid HTTP request received.
+INFO:     159.223.72.116:49656 - "GET / HTTP/1.1" 200 OK
+INFO:     159.223.72.116:49660 - "GET /login HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45354 - "GET /historical/EUR_USD?start_date=2024-01-01&end_date=2024-03-20 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36338 - "GET /historical/EUR_USD?start_date=2024-01-01&end_date=2024-03-20 HTTP/1.1" 404 Not Found

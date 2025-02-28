@@ -1,0 +1,35 @@
+TLTR - Date: 2025-02-20
+Objective:
+Fetch and process live market data from the Flask API using the MarketDataAgent class.
+Steps Taken:
+Setting Up the MarketDataAgent Class:
+
+API Setup: Ensured that the API URL and key are loaded from the .env file.
+SSL Handling: Configured the script to bypass SSL verification for self-signed certificates.
+Data Fetching: Implemented a method to fetch market data from the Flask API and store it in a DataFrame.
+Error Handling:
+
+API Key Issue: Resolved by ensuring the API key is read from the .env file or passed explicitly.
+SSL Certificate Issue: By using verify=False to bypass the SSL certificate verification during the request.
+Data Validation: Ensured that response data is parsed correctly into a pandas DataFrame.
+Testing:
+
+Ran unit tests to mock API responses and verify that the MarketDataAgent class is functioning as expected.
+Successful Execution:
+
+The script fetched live market data and printed the first few rows of the data as a pandas DataFrame.
+Issues Encountered:
+SSL Certificate Verification Error: Solved by bypassing SSL checks.
+API Key Missing: Ensured the API key is passed or fetched from the environment.
+Solutions Implemented:
+Added proper handling for environment variables using the dotenv library.
+Set verify=False in the API request to handle self-signed certificates.
+Validated and processed the response from the API to ensure it's in the correct format.
+Results:
+Successfully fetched live market data and displayed it in a pandas DataFrame.
+Next Steps:
+Data Storage: Consider storing the fetched data in a database for future use.
+Integration: Expand functionality to integrate this data with other parts of the trading system, like executing trades.
+Notes:
+After days of work, the market data fetching script is now fully functional.
+Saved all relevant progress for future reference, so there's no need to repeat steps.

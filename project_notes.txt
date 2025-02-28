@@ -1,0 +1,75 @@
+🚀 OrbiWealth Project Overview
+
+System Setup
+
+Cursor is running locally and can execute Python scripts.
+
+Agents VPS is used for AI processing (with GPU) but does not have Flask (DO NOT SUGGEST IT).
+
+MT5 VPS is used for trade execution and running MetaTrader 5.
+
+No mounted drives are in use anymore; everything runs directly on each server.
+
+📌 Current Development Tasks
+
+✅ Completed Tasks:
+
+[✅] Fix SSH + Cursor Setup
+
+[✅] Set Up SSH Key Authentication (No more password prompts)
+
+[✅] Remove Cursor VPS and consolidate work to local Cursor + Agents VPS
+
+🔲 In Progress:
+
+ 🔲] Debug Market Data Agent
+
+[🔲] AI Strategy Optimization
+
+[🔲] Test Live Trading Execution on MT5 VPS
+
+🔜 Upcoming Tasks:
+
+
+
+🛠️ Key System Rules & Notes
+
+Cursor edits & runs Python locally (not on VPS).
+
+AI training runs on the Agents VPS GPU (for optimization and model training).
+
+Market data is fetched via [Specify method if needed].
+
+Trade execution happens only on MT5 VPS (no direct execution on Agents VPS).
+
+🚧 Things to Avoid (Important)
+
+❌ No Flask on Agents VPS.
+
+❌ Cursor should not be used for anything except local coding and Python execution.
+
+❌ Ensure that AI strategies are backtested before execution on live accounts.
+
+📂 Useful Commands & References
+
+SSH into Agents VPS
+
+ssh administrator@93.127.132.119
+
+Activate Python Virtual Environment (If Needed)
+
+source venv/bin/activate  # For Linux/macOS
+Run Python Scripts in Cursor Terminal
+
+python script_name.py
+
+📌 Notes for Future Development
+
+Ensure that AI-generated strategies are validated before execution.
+
+Implement risk management models before enabling automated trading.
+
+Improve logging and monitoring for AI strategy results.
+
+🚀 Everything is now structured. Add new details here as needed!
+

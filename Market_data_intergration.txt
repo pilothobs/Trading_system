@@ -1,0 +1,38 @@
+Market Data Integration & API Fixes – 2025-02-21
+Summary of Work Completed:
+Fixed market data retrieval from Flask API to Ubuntu.
+Confirmed trade execution from mt5_script.py is working.
+Resolved API connectivity issues (SSL, headers, firewall rules).
+Verified market data logging and confirmed successful data flow.
+Prepared next steps for data storage and agent processing.
+Key Configuration Details:
+Flask API (Running on Windows VPS):
+
+Server Address: megatradingsystem.ddns.net
+Port: 5000
+SSL Enabled: Yes (C:/Certs/fullchain.pem, C:/Certs/privkey.pem)
+API Key Header: X-API-Key
+Allowed Requests:
+/market_data → Fetch live market data
+/trade → Execute trades
+/close_all_positions → Close open trades
+/get_stored_market_data → Retrieve stored market data (coming soon)
+Ubuntu Market Data Agent:
+
+Flask API Endpoint Used: https://megatradingsystem.ddns.net:5000/market_data
+Authentication Header: X-API-Key: <your-api-key>
+Security Exception for SSL: --insecure flag needed in curl due to self-signed cert.
+Firewall & Network Fixes:
+
+Port 5000 Opened in Windows Firewall for Ubuntu Requests
+Allowed Ubuntu IP (93.127.132.119) in Firewall Rules
+Confirmed Flask is Listening on 0.0.0.0:5000 (Not Just 127.0.0.1)
+Supabase Integration:
+Supabase URL: https://oposkfcoyitvxeiaisal.supabase.co
+Supabase API Key: <your-api-key>
+Purpose: Store market data retrieved from Flask API in Supabase for further processing and retrieval by other agents.
+Python Supabase Client: Used supabase-py library to connect and store data in the market_data table.
+Next Steps:
+Set up PostgreSQL (or decide on Redis) for market data storage.
+Modify market_data_agent.py to store and serve data to other agents.
+Ensure /get_stored_market_data API endpoint works for agent queries.

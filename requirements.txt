@@ -1,0 +1,9 @@
+flask
+requests
+pandas
+numpy
+scipy
+ta
+matplotlib
+pydantic
+langchain
