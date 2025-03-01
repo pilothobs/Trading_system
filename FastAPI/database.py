@@ -1,9 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
+from sqlalchemy.orm import declarative_base, sessionmaker
 import requests
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 # Load environment variables
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
@@ -30,8 +30,9 @@ class Trade(Base):
     trade_type = Column(String)
     amount = Column(Integer)
     price = Column(Float)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
-# Create tables if they don’t exist
+# Create tables if they don't exist
 Base.metadata.create_all(bind=engine)
 
 # Fetch Market Price from OANDA
