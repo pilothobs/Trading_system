@@ -128,23 +128,37 @@ def upload_to_google_drive(file_path, folder_name="Trading System Backups"):
     
     try:
         print(f"Authenticating with Google Drive...")
+        # Get the directory where this script is located
+        script_dir = Path(__file__).parent.absolute()
+        
+        # Set up the GoogleAuth object with the correct paths
         gauth = GoogleAuth()
         
+        # Set the client secrets file path
+        client_secrets_path = script_dir / "client_secrets.json"
+        gauth.settings['client_config_file'] = str(client_secrets_path)
+        
+        # Set the credentials file path
+        credentials_path = script_dir / "credentials.json"
+        
         # Try to load saved client credentials
-        gauth.LoadCredentialsFile("credentials.json")
+        gauth.LoadCredentialsFile(str(credentials_path))
         
         if gauth.credentials is None:
-            # Authenticate if they're not available
-            gauth.LocalWebserverAuth()
+            # Use the CommandLineAuth method which works better in headless environments
+            print("No stored credentials found. Starting new authentication flow.")
+            print("Please follow the instructions below to authenticate:")
+            gauth.CommandLineAuth()
         elif gauth.access_token_expired:
             # Refresh them if expired
+            print("Refreshing expired credentials...")
             gauth.Refresh()
         else:
             # Initialize the saved creds
             gauth.Authorize()
             
         # Save the current credentials to a file
-        gauth.SaveCredentialsFile("credentials.json")
+        gauth.SaveCredentialsFile(str(credentials_path))
         
         drive = GoogleDrive(gauth)
         
@@ -217,9 +231,20 @@ def main():
     
     if backup_path:
         # Upload to Google Drive
-        if not args.no_upload:
-            upload_to_google_drive(backup_path)
-        
+        if not args.no_upload and GOOGLE_DRIVE_AVAILABLE:
+            print("\nNOTE: Google Drive upload requires additional setup.")
+            print("For now, your backup has been created locally at:")
+            print(f"  {backup_path}")
+            print("\nTo set up Google Drive integration:")
+            print("1. Go to https://console.cloud.google.com/")
+            print("2. Create a project and enable the Google Drive API")
+            print("3. Create OAuth credentials (Desktop app)")
+            print("4. Download the credentials JSON file")
+            print("5. Save it as 'client_secrets.json' in the tools/backup directory")
+            print("\nAlternatively, you can manually upload the backup to Google Drive through the web interface.")
+        else:
+            print(f"\nBackup created successfully at: {backup_path}")
+            
         # Cleanup old backups
         cleanup_old_backups(backup_path.parent, args.max_backups)
     
