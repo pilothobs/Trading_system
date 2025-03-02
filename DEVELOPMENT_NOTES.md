@@ -19,9 +19,11 @@ trading_system/
 │   │   ├── test_resource_usage.py # Tests resource usage of agents
 │   │   └── README.md              # Documentation for monitoring tools
 │   └── backup/             # Backup tools
-│       ├── backup_to_drive.py     # Backs up to Google Drive
-│       ├── schedule_backup.py     # Schedules automatic backups
-│       └── README.md              # Documentation for backup tools
+│       ├── backup_to_s3.py        # Backs up to AWS S3
+│       ├── schedule_s3_backup.py  # Schedules automatic S3 backups
+│       ├── aws_config.py          # AWS configuration settings
+│       ├── configure_aws_cli.py   # Configures AWS CLI with credentials
+│       └── README.md              # Documentation for AWS S3 backup
 ├── logs/                   # Log files and analysis results
 │   ├── resource_usage_*.log       # Resource monitoring logs
 │   ├── resource_usage_*_plot.png  # Resource usage plots
@@ -51,9 +53,9 @@ trading_system/
 - Reorganized monitoring tools into dedicated directory structure
 
 ### Backup System
-- Implemented Google Drive backup integration
-- Created automated backup scheduling with change detection
-- Set up backup rotation to manage storage efficiently
+- Implemented AWS S3 backup functionality for cloud storage
+- Created AWS CLI configuration tools for easier setup
+- Implemented test backup feature for quick verification
 - Documented backup procedures and configuration
 
 ## Key Decisions
@@ -75,10 +77,11 @@ trading_system/
 
 ### Backup Strategy
 - Primary backup to GitHub repository for code
-- Secondary backup to Google Drive for complete project state
+- Secondary backup to AWS S3 for cloud-based redundancy
 - Automated backups triggered by changes or on a schedule
 - Retention policy to manage backup storage efficiently
-- Sensitive files (like .env with API keys) are explicitly included in Google Drive backups
+- Sensitive files (like .env with API keys) are explicitly included in backups
+- Test backup feature allows quick verification of backup functionality
 
 ## Usage Examples
 
@@ -105,11 +108,17 @@ python agents/backtesting.py
 ### Backing Up the Project
 
 ```bash
-# Manual backup to Google Drive
-python tools/backup/backup_to_drive.py
+# Manual backup to AWS S3
+python tools/backup/backup_to_s3.py
 
-# Set up automatic backups (runs in background)
-python tools/backup/schedule_backup.py --interval 60 --daemon
+# Create a smaller test backup to AWS S3
+python tools/backup/backup_to_s3.py --test
+
+# Set up automatic AWS S3 backups (runs in background)
+python tools/backup/schedule_s3_backup.py --interval 60 --daemon
+
+# Configure AWS CLI with credentials from aws_config.py
+python tools/backup/configure_aws_cli.py
 ```
 
 ## Next Steps
@@ -118,10 +127,13 @@ python tools/backup/schedule_backup.py --interval 60 --daemon
 - Implement additional trading strategies
 - Enhance monitoring for multi-agent scenarios
 - Evaluate GPU acceleration for machine learning models if needed
+- Set up automated backup verification and reporting
 
 ## Notes on Development Environment
 
 - Project is hosted on a VPS accessible via SSH
 - Development occurs across multiple devices
 - This document helps maintain continuity between development sessions
-- Backups ensure project safety in case of VPS issues 
+- Multiple backup strategies ensure project safety:
+  - GitHub for code version control
+  - AWS S3 for cloud-based redundancy 

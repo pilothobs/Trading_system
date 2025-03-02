@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Schedule Automatic Backups
+Schedule Automatic Backups to AWS S3
 
-This script sets up automatic backups of the trading system at specified intervals.
+This script sets up automatic backups of the trading system to AWS S3 at specified intervals.
 It uses a background process to monitor for changes and trigger backups.
 """
 
@@ -21,10 +21,30 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("backup_scheduler.log"),
+        logging.FileHandler("s3_backup_scheduler.log"),
         logging.StreamHandler(sys.stdout)
     ]
 )
+
+# Try to import AWS configuration
+try:
+    from aws_config import (
+        AWS_ACCESS_KEY_ID,
+        AWS_SECRET_ACCESS_KEY,
+        AWS_REGION,
+        S3_BUCKET_NAME,
+        MAX_BACKUPS,
+        INCLUDE_VENV
+    )
+    CONFIG_AVAILABLE = True
+except ImportError:
+    CONFIG_AVAILABLE = False
+    logging.warning("AWS configuration not found. Using default values.")
+    # Set default values
+    AWS_REGION = None
+    S3_BUCKET_NAME = None
+    MAX_BACKUPS = 5
+    INCLUDE_VENV = False
 
 def get_project_root():
     """Get the root directory of the trading system project"""
@@ -63,16 +83,40 @@ def calculate_project_hash():
             except Exception as e:
                 logging.warning(f"Failed to read {file_path}: {e}")
     
+    # Also include sensitive files in the hash calculation
+    sensitive_files = [".env", "client_secrets.json", "credentials.json"]
+    for file_name in sensitive_files:
+        file_path = project_root / file_name
+        if file_path.is_file():
+            try:
+                with open(file_path, 'rb') as f:
+                    content = f.read()
+                    hasher.update(content)
+            except Exception as e:
+                logging.warning(f"Failed to read {file_name}: {e}")
+    
     return hasher.hexdigest()
 
-def run_backup():
+def run_backup(bucket_name=None, region=None, access_key=None, secret_key=None):
     """Run the backup script"""
-    backup_script = Path(__file__).parent / "backup_to_drive.py"
+    backup_script = Path(__file__).parent / "backup_to_s3.py"
     
     try:
+        cmd = [sys.executable, str(backup_script)]
+        
+        # Add command line arguments if provided
+        if bucket_name:
+            cmd.extend(["--bucket", bucket_name])
+        if region:
+            cmd.extend(["--region", region])
+        if access_key:
+            cmd.extend(["--access-key", access_key])
+        if secret_key:
+            cmd.extend(["--secret-key", secret_key])
+        
         logging.info("Running backup...")
         result = subprocess.run(
-            [sys.executable, str(backup_script)],
+            cmd,
             capture_output=True,
             text=True
         )
@@ -80,7 +124,8 @@ def run_backup():
         if result.returncode == 0:
             logging.info("Backup completed successfully")
             for line in result.stdout.splitlines():
-                logging.info(f"  {line}")
+                if line.strip():  # Only log non-empty lines
+                    logging.info(f"  {line}")
         else:
             logging.error("Backup failed")
             logging.error(f"Error: {result.stderr}")
@@ -91,17 +136,23 @@ def run_backup():
         logging.error(f"Failed to run backup: {e}")
         return False
 
-def monitor_changes(interval_minutes=60, change_detection=True):
+def monitor_changes(interval_minutes=60, change_detection=True, bucket_name=None, region=None, access_key=None, secret_key=None):
     """
     Monitor the project for changes and run backups
     
     Args:
         interval_minutes: Minimum time between backups in minutes
         change_detection: Whether to only backup when changes are detected
+        bucket_name: S3 bucket name
+        region: AWS region
+        access_key: AWS access key ID
+        secret_key: AWS secret access key
     """
-    logging.info(f"Starting backup scheduler")
+    logging.info(f"Starting S3 backup scheduler")
     logging.info(f"  Interval: {interval_minutes} minutes")
     logging.info(f"  Change detection: {'enabled' if change_detection else 'disabled'}")
+    logging.info(f"  S3 bucket: {bucket_name or 'Not specified'}")
+    logging.info(f"  AWS region: {region or 'Default'}")
     
     last_backup_time = 0
     last_hash = calculate_project_hash() if change_detection else None
@@ -126,7 +177,7 @@ def monitor_changes(interval_minutes=60, change_detection=True):
                         last_hash = current_hash
                 
                 if run_backup_now:
-                    success = run_backup()
+                    success = run_backup(bucket_name, region, access_key, secret_key)
                     if success:
                         last_backup_time = time.time()
             
@@ -138,15 +189,25 @@ def monitor_changes(interval_minutes=60, change_detection=True):
         logging.info("Backup scheduler stopped by user")
 
 def main():
-    parser = argparse.ArgumentParser(description='Schedule automatic backups of the trading system')
+    parser = argparse.ArgumentParser(description='Schedule automatic backups of the trading system to AWS S3')
     parser.add_argument('--interval', type=int, default=60,
                         help='Minimum time between backups in minutes (default: 60)')
     parser.add_argument('--no-change-detection', action='store_true',
                         help='Disable change detection (backup at fixed intervals)')
     parser.add_argument('--daemon', action='store_true',
                         help='Run as a background daemon process')
+    parser.add_argument('--bucket', help='S3 bucket name')
+    parser.add_argument('--region', help='AWS region (e.g., us-east-1)')
+    parser.add_argument('--access-key', help='AWS access key ID')
+    parser.add_argument('--secret-key', help='AWS secret access key')
     
     args = parser.parse_args()
+    
+    # Use command line arguments if provided, otherwise use config values
+    bucket_name = args.bucket or S3_BUCKET_NAME
+    aws_region = args.region or AWS_REGION
+    aws_access_key = args.access_key or AWS_ACCESS_KEY_ID
+    aws_secret_key = args.secret_key or AWS_SECRET_ACCESS_KEY
     
     if args.daemon:
         # Fork the process to run in the background
@@ -154,7 +215,7 @@ def main():
             pid = os.fork()
             if pid > 0:
                 # Exit the parent process
-                logging.info(f"Backup scheduler started in background (PID: {pid})")
+                logging.info(f"S3 backup scheduler started in background (PID: {pid})")
                 sys.exit(0)
         except OSError as e:
             logging.error(f"Failed to fork: {e}")
@@ -178,7 +239,14 @@ def main():
             os.dup2(f.fileno(), sys.stderr.fileno())
     
     # Start monitoring for changes
-    monitor_changes(args.interval, not args.no_change_detection)
+    monitor_changes(
+        args.interval, 
+        not args.no_change_detection,
+        bucket_name,
+        aws_region,
+        aws_access_key,
+        aws_secret_key
+    )
 
 if __name__ == "__main__":
     main() 
