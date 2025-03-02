@@ -69,6 +69,7 @@ python tools/backup/schedule_backup.py --interval 60 --daemon
 
 - Backups are created as ZIP archives with timestamps in the filename
 - By default, only tracked files are included in the backup
+- **Important sensitive files** like `.env`, `client_secrets.json`, and `credentials.json` are **explicitly included** in the backup even though they're excluded from Git
 - The virtual environment is excluded by default to reduce backup size
 - Old backups are automatically cleaned up to save space
 - Backups are uploaded to a "Trading System Backups" folder in Google Drive

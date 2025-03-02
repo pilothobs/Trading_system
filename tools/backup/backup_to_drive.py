@@ -89,6 +89,13 @@ def create_backup_archive(output_dir=None, include_venv=False):
         # Create a set of all files to include in the backup
         backup_files = set(all_files)
         
+        # Ensure sensitive files are included (even if they're in .gitignore)
+        sensitive_files = [".env", "client_secrets.json", "credentials.json"]
+        for file in sensitive_files:
+            if os.path.exists(file):
+                print(f"Including sensitive file in backup: {file}")
+                backup_files.add(file)
+        
         # Create the zip archive
         shutil.make_archive(
             str(backup_path.with_suffix("")),  # Remove .zip extension

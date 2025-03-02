@@ -33,4 +33,8 @@ build/
 *.egg-info/
 
 # Jupyter Notebook
-.ipynb_checkpoints 
+.ipynb_checkpoints
+
+# Google Drive API credentials
+client_secrets.json
+credentials.json 

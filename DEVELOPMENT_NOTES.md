@@ -78,6 +78,7 @@ trading_system/
 - Secondary backup to Google Drive for complete project state
 - Automated backups triggered by changes or on a schedule
 - Retention policy to manage backup storage efficiently
+- Sensitive files (like .env with API keys) are explicitly included in Google Drive backups
 
 ## Usage Examples
 
