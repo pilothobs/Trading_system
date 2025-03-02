@@ -66,7 +66,7 @@ class TestAgent:
         })
         
         # Now we can use pandas shift on the DataFrame
-        self.data['open'] = self.data['close'].shift(1).fillna(method='bfill')
+        self.data['open'] = self.data['close'].shift(1).bfill()
         
         # Allocate memory based on memory_mb
         target_bytes = self.memory_mb * 1024 * 1024
