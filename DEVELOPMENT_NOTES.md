@@ -13,16 +13,21 @@ trading_system/
 │   ├── crew_agents.py      # Multi-agent trading system
 │   └── prim_gpt.py         # GPT-based trading agent
 ├── tools/                  # Utility tools
-│   └── monitoring/         # Resource monitoring tools
-│       ├── resource_monitor.py    # Monitors CPU and RAM usage
-│       ├── analyze_resources.py   # Analyzes resource usage logs
-│       ├── test_resource_usage.py # Tests resource usage of agents
-│       └── README.md              # Documentation for monitoring tools
+│   ├── monitoring/         # Resource monitoring tools
+│   │   ├── resource_monitor.py    # Monitors CPU and RAM usage
+│   │   ├── analyze_resources.py   # Analyzes resource usage logs
+│   │   ├── test_resource_usage.py # Tests resource usage of agents
+│   │   └── README.md              # Documentation for monitoring tools
+│   └── backup/             # Backup tools
+│       ├── backup_to_drive.py     # Backs up to Google Drive
+│       ├── schedule_backup.py     # Schedules automatic backups
+│       └── README.md              # Documentation for backup tools
 ├── logs/                   # Log files and analysis results
 │   ├── resource_usage_*.log       # Resource monitoring logs
 │   ├── resource_usage_*_plot.png  # Resource usage plots
 │   └── resource_usage_*_summary.txt # Resource usage summaries
 ├── venv/                   # Python virtual environment (not tracked in Git)
+├── DEVELOPMENT_NOTES.md    # Development notes and progress tracking
 └── .gitignore              # Git ignore file
 ```
 
@@ -45,11 +50,18 @@ trading_system/
 - Tested with high CPU intensity to evaluate performance
 - Reorganized monitoring tools into dedicated directory structure
 
+### Backup System
+- Implemented Google Drive backup integration
+- Created automated backup scheduling with change detection
+- Set up backup rotation to manage storage efficiently
+- Documented backup procedures and configuration
+
 ## Key Decisions
 
 ### Project Organization
 - Separated trading logic (agents) from utility tools
 - Created dedicated monitoring tools in `tools/monitoring/`
+- Added backup tools in `tools/backup/`
 - Centralized logging in the `logs/` directory
 
 ### Git Management
@@ -60,6 +72,12 @@ trading_system/
 - Implemented monitoring to track resource usage during trading
 - Analysis showed current CPU and memory usage is acceptable
 - Will continue monitoring as more agents are added to determine if GPU acceleration is needed
+
+### Backup Strategy
+- Primary backup to GitHub repository for code
+- Secondary backup to Google Drive for complete project state
+- Automated backups triggered by changes or on a schedule
+- Retention policy to manage backup storage efficiently
 
 ## Usage Examples
 
@@ -83,6 +101,16 @@ python tools/monitoring/analyze_resources.py --latest
 python agents/backtesting.py
 ```
 
+### Backing Up the Project
+
+```bash
+# Manual backup to Google Drive
+python tools/backup/backup_to_drive.py
+
+# Set up automatic backups (runs in background)
+python tools/backup/schedule_backup.py --interval 60 --daemon
+```
+
 ## Next Steps
 
 - Refine backtesting agent for improved performance
@@ -94,4 +122,5 @@ python agents/backtesting.py
 
 - Project is hosted on a VPS accessible via SSH
 - Development occurs across multiple devices
-- This document helps maintain continuity between development sessions 
+- This document helps maintain continuity between development sessions
+- Backups ensure project safety in case of VPS issues 
